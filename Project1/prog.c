@@ -119,20 +119,15 @@ void racefileread(Placelistelem *head, char *filename) {//A versenyfájl beolvasá
 		printf("NINCS VERSENYFÁLJ");
 	}
 	while (fscanf(racefile, "%d", &race->year) == 1) {//Az évszám beolvasása
-		printf("\n EV BEOLVASVA");
 		fscanf(racefile, "%d", &race->number);//A verseny sorszámának beolvasása
-		printf("\n SZAM BEOLVASVA");
 		fscanf(racefile, "%d", &race->best_min);//A legjobb idõ perceredménye
-		printf("\n PERC BOLVASVA");
 		fscanf(racefile, "%lf", &race->best_sec);//A legjobb idõ másodperceredménye
-		printf("\n MASODPERC BEOLVASVA");
 		fscanf(racefile, "%c", &c);//a másodperc és a rá következõ string közötti whitespace átlépése
 		while (fscanf(racefile, "%c", &c)==1 && c != ' ') {//A gyõztes kódjának beolvasása
 			race->winner[i] = c;
 			i = i + 1;
 		}
 		race->winner[i] = '\0';
-		printf("\n WINNER BEOLVASVA");
 		i = 0;
 		while (fscanf(racefile, "%c", &c)==1 && c != ' ') {//A pol pozíciót elnyerõ kódjának beolvasása
 			race->pol[i] = c;
@@ -140,13 +135,13 @@ void racefileread(Placelistelem *head, char *filename) {//A versenyfájl beolvasá
 		}
 		race->pol[i] = '\0';
 		i = 0;
-		printf("\n POL BEOLVASVA");
-		i = 0;
 		while (fscanf(racefile, "%c", &c) == 1 && c != ',') {//A leggyorsabb versenyzõ kódjának beolvasása
 			race->fastest[i] = c;
+			//printf("%c", race->fastest[i]);
 			i = i + 1;
 		}
-		printf("\n FASTEST BEOLVASVA");
+		//printf("\n");
+		race->fastest[i] = '\0';
 		Racelistelem *new;
 		new = newraceelem(*race);//új elem létrehozása
 		raceputorder(head, new);//Az elem elhelyezése a fésûs listában
@@ -155,19 +150,6 @@ void racefileread(Placelistelem *head, char *filename) {//A versenyfájl beolvasá
 		race->best_min = 0;
 		race->best_sec = 0;
 		i = 0;
-		printf("%d %d ", new->race.number, new->race.year);
-		for (i = 0; new->race.winner[i] != '\0'; i++)
-			printf("%c", new->race.winner[i]);
-		printf(" ");
-		i = 0;
-		while (new->race.pol[i] != '\0') {
-			printf("%c", new->race.pol[i]);
-			i = i++;
-		}
-		printf(" ");
-		for (i = 0; new->race.fastest[i] != '\0'; i++)
-			printf("%c", new->race.fastest[i]);
-		printf(" %d %lf \n", new->race.best_min, new->race.best_sec);
 	}
 	free(race);
 	fclose(racefile);
@@ -213,17 +195,17 @@ Racelistelem** fastest_too(Racelistelem **tomb, int *n) {//A második, kisebb töm
 	Racelistelem **final;
 	final = (Racelistelem**)malloc(sum * sizeof(Racelistelem*));
 	int finali = 0;
-	printf("Az elsõ tömb elemszáma: %d", *n);
+	//printf("Az elsõ tömb elemszáma: %d", *n);
 	for (i = 0; i < *n; i++) {
 		if (strcmp(tomb[i]->race.winner, tomb[i]->race.fastest)==0) {
 			final[finali] = tomb[i];
 			finali++;
-			printf("SIKER  ");
+			//printf("SIKER  ");
 		}
 	}
 	free(tomb);
 	*n = sum;
-	printf("\n A kisebb tömb elemszáma: %d", sum);
+	//printf("\n A kisebb tömb elemszáma: %d", sum);
 	return final;
 }
 int appliedrace_counter(Placelistelem *head) {//Az elsõ tömb létrehozásához kellõ függvény, amely a tömb méretét fogja megadni
@@ -284,7 +266,7 @@ Racelistelem * search(Placelistelem *head) {//A kérdésnek megfelelõ struktúra me
 		placecopy(head, tomb, i, *n);//Az elsõ tömb feltöltése
 		tomb = fastest_too(tomb, n);//Az elsõ tömbbõl a második létrehozása
 		final = tomb[0];
-		printf("\n %d", *n);
+		//printf("\n %d", *n);
 		for (*i = 0; *i < *n; *i=*i+1) {//A másodiktömbbõl a leggyorsabb megkeresése
 			if (final->race.best_min >= tomb[*i]->race.best_min) {
 				if (final->race.best_sec >= tomb[*i]->race.best_sec) {
@@ -295,13 +277,12 @@ Racelistelem * search(Placelistelem *head) {//A kérdésnek megfelelõ struktúra me
 		}
 		free(n);
 		free(i);
-		printf("\n felszabadítás elõtt");
+		//printf("\n felszabadítás elõtt");
 		free(&tomb[0]);
-//Minden, a függvényben lefoglalt terület felszabadítása
 		tomb = NULL;
 		n = NULL;
 		i = NULL;
-		printf("\n Megvan a keresett elem ");
+		//printf("\n Megvan a keresett elem ");
 		return final;
 	}
 	free(n);
@@ -350,9 +331,9 @@ int main() {
 	Racelistelem *final;
 	head = placefileread(head, "helyek.txt");//A gerinclista létrehozása, és az adatok beolvasása a fájlból
 	racefileread(head, "verseny.txt"); //A versenylisták létrehozása, az adatok beolvasása a fájlból és a listák elhelyezése 
-	outwriteplace(head); //Ellenõrzõ függvény a fésûs lista kiírásához
+	//outwriteplace(head); //Ellenõrzõ függvény a fésûs lista kiírásához
  	final = search(head);//A kérdésnek megfelelõ struktúramegkeresése
-	printf("\nvisszatértünk a keresett elemmel");
+	//printf("\nvisszatértünk a keresett elemmel");
 	final_print(final, head);//Az eredmények kiírása
 	deleteplacelist(head); //A fésûs lista teljes felszabadítása
 	getch();
@@ -360,5 +341,3 @@ int main() {
 	final = NULL; 
 	return 0; 
 } 
-//it is a test comment for github changes uj
-//meg egy komment
