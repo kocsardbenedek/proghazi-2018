@@ -361,3 +361,4 @@ int main() {
 	return 0; 
 } 
 //it is a test comment for github changes uj
+//meg egy komment
