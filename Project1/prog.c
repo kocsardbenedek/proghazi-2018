@@ -137,10 +137,8 @@ void racefileread(Placelistelem *head, char *filename) {//A versenyfájl beolvasá
 		i = 0;
 		while (fscanf(racefile, "%c", &c) == 1 && c != ',') {//A leggyorsabb versenyzõ kódjának beolvasása
 			race->fastest[i] = c;
-			//printf("%c", race->fastest[i]);
 			i = i + 1;
 		}
-		//printf("\n");
 		race->fastest[i] = '\0';
 		Racelistelem *new;
 		new = newraceelem(*race);//új elem létrehozása
@@ -195,17 +193,14 @@ Racelistelem** fastest_too(Racelistelem **tomb, int *n) {//A második, kisebb töm
 	Racelistelem **final;
 	final = (Racelistelem**)malloc(sum * sizeof(Racelistelem*));
 	int finali = 0;
-	//printf("Az elsõ tömb elemszáma: %d", *n);
 	for (i = 0; i < *n; i++) {
 		if (strcmp(tomb[i]->race.winner, tomb[i]->race.fastest)==0) {
 			final[finali] = tomb[i];
 			finali++;
-			//printf("\n SIKER  ");
 		}
 	}
 	free(tomb);
 	*n = sum;
-	//printf("\n A kisebb tömb elemszáma: %d", sum);
 	return final;
 }
 int appliedrace_counter(Placelistelem *head) {//Az elsõ tömb létrehozásához kellõ függvény, amely a tömb méretét fogja megadni
@@ -224,7 +219,6 @@ int appliedrace_counter(Placelistelem *head) {//Az elsõ tömb létrehozásához kell
 			}
 		}
 	}
-	printf("Az elso tomb elemszama: %d", sum);
 	return sum;
 }
 int appliedrace_copy(Racelistelem *head, Racelistelem **tomb, int i, int n) {//Az elsõ tömböt feltöltõ függvény
@@ -267,7 +261,6 @@ Racelistelem * search(Placelistelem *head) {//A kérdésnek megfelelõ struktúra me
 		placecopy(head, tomb, i, *n);//Az elsõ tömb feltöltése
 		tomb = fastest_too(tomb, n);//Az elsõ tömbbõl a második létrehozása
 		final = tomb[0];
-		//printf("\n A masodik tomb elemszama :%d", *n);
 		for (*i = 0; *i < *n; *i=*i+1) {//A másodiktömbbõl a leggyorsabb megkeresése
 			if (final->race.best_min >= tomb[*i]->race.best_min) {
 				if (final->race.best_sec >= tomb[*i]->race.best_sec) {
@@ -278,12 +271,10 @@ Racelistelem * search(Placelistelem *head) {//A kérdésnek megfelelõ struktúra me
 		}
 		free(n);
 		free(i);
-		//printf("\n felszabadítás elõtt");
 		free(&tomb[0]);
 		tomb = NULL;
 		n = NULL;
 		i = NULL;
-		//printf("\n Megvan a keresett elem ");
 		return final;
 	}
 	free(n);
@@ -334,7 +325,6 @@ int main() {
 	racefileread(head, "verseny.txt"); //A versenylisták létrehozása, az adatok beolvasása a fájlból és a listák elhelyezése 
 	//outwriteplace(head); //Ellenõrzõ függvény a fésûs lista kiírásához
  	final = search(head);//A kérdésnek megfelelõ struktúramegkeresése
-	//printf("\nvisszatértünk a keresett elemmel");
 	final_print(final, head);//Az eredmények kiírása
 	deleteplacelist(head); //A fésûs lista teljes felszabadítása
 	getch();
