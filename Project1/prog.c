@@ -189,7 +189,7 @@ void outwriteplace(Placelistelem* head) {//Ellenõrzõ függvény, amely minden geri
 Racelistelem** fastest_too(Racelistelem **tomb, int *n) {//A második, kisebb tömböt létrehozó függvény
 	int i, sum = 0;
 	for (i = 0; i < *n; i++) {
-		if (strcmp(tomb[i]->race.winner, tomb[i]->race.fastest))
+		if (strcmp(tomb[i]->race.winner, tomb[i]->race.fastest)==0)
 			sum = sum + 1;
 	}
 	Racelistelem **final;
@@ -200,7 +200,7 @@ Racelistelem** fastest_too(Racelistelem **tomb, int *n) {//A második, kisebb töm
 		if (strcmp(tomb[i]->race.winner, tomb[i]->race.fastest)==0) {
 			final[finali] = tomb[i];
 			finali++;
-			//printf("SIKER  ");
+			//printf("\n SIKER  ");
 		}
 	}
 	free(tomb);
@@ -224,6 +224,7 @@ int appliedrace_counter(Placelistelem *head) {//Az elsõ tömb létrehozásához kell
 			}
 		}
 	}
+	printf("Az elso tomb elemszama: %d", sum);
 	return sum;
 }
 int appliedrace_copy(Racelistelem *head, Racelistelem **tomb, int i, int n) {//Az elsõ tömböt feltöltõ függvény
@@ -266,7 +267,7 @@ Racelistelem * search(Placelistelem *head) {//A kérdésnek megfelelõ struktúra me
 		placecopy(head, tomb, i, *n);//Az elsõ tömb feltöltése
 		tomb = fastest_too(tomb, n);//Az elsõ tömbbõl a második létrehozása
 		final = tomb[0];
-		//printf("\n %d", *n);
+		//printf("\n A masodik tomb elemszama :%d", *n);
 		for (*i = 0; *i < *n; *i=*i+1) {//A másodiktömbbõl a leggyorsabb megkeresése
 			if (final->race.best_min >= tomb[*i]->race.best_min) {
 				if (final->race.best_sec >= tomb[*i]->race.best_sec) {
